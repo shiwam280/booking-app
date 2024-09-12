@@ -4,20 +4,25 @@ import { useParams } from "react-router-dom";
 import BookingWidget from "../components/BookingWidget";
 import PlaceGallery from "../components/PlaceGallery";
 import AddressLink from "../components/AddressLink";
+import Loader from "../components/Loader";
 
 const PlacePage = () => {
   const { id } = useParams();
   const [place, setPlace] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!id) {
       return;
     }
+    setIsLoading(true);
     axios.get(`/places/${id}`).then((response) => {
       setPlace(response.data);
+      setIsLoading(false);
     });
   }, [id]);
 
+  if (isLoading) return <Loader />;
   if (!place) return "";
 
   return (
